@@ -34,7 +34,7 @@ class Agent():
             return torch.argmax(q).item()
         
         elif self.policy == "epsilon-greedy":
-            if np.random.random() > self.epsilon:
+            if np.random.random() < self.epsilon:
                 return np.random.randint(self.net.action_space_size)
             return torch.argmax(q).item()
         
