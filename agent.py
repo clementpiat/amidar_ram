@@ -24,7 +24,7 @@ class Agent():
         self.batch_size = batch_size
         self.C = C
         
-        self.optimizer = torch.optim.Adam(self.net.parameters(), lr=1e-2)
+        self.optimizer = torch.optim.Adam(self.net.parameters(), lr=5e-3)
         self.loss_fun = nn.SmoothL1Loss()
         self.replay_buffer = deque(maxlen=100000)
         self.iteration = 0
