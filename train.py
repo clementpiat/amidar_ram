@@ -8,26 +8,37 @@ from agent import Agent
 from net import DeepQNet
 
 def train(n_episodes=20, n_steps_max=2000, print_ever_k_episodes=5):
+    env = gym.make('CartPole-v1')
     net = DeepQNet()
-    agent = Agent(net)
-    
-    env = gym.make('Boxing-ram-v0')
+    agent = Agent(net, env)
+
     env.reset()
     scores = []
+    best_agent, best_score = None, 0
 
     for i_episode in range(n_episodes):
         cumulative_reward = 0
         observation = env.reset()
         for t in range(n_steps_max):
             # env.render()
-            action = agent.act(observation)
+            action = agent.act(observation, i_episode)
             previous_observation = observation
-            observation, reward, done, info = env.step(action)
-            agent.learn(previous_observation, action, reward, observation)
+            observation, reward, done, info = env.step(action)    
             cumulative_reward += reward
             
             if done:
+                reward = -1
+
+            agent.remember(previous_observation, action, reward, observation)
+            
+            if done:
                 break
+        
+        if cumulative_reward > best_score:
+            best_score = cumulative_reward
+            best_agent = agent
+
+        agent.learn()   
                 
         scores.append(cumulative_reward)
         if (i_episode+1)%print_ever_k_episodes==0:
@@ -37,7 +48,7 @@ def train(n_episodes=20, n_steps_max=2000, print_ever_k_episodes=5):
     plt.plot(scores)
     plt.savefig("scores.png")
     
-    return net, agent
+    return best_agent
 
 if __name__ == "__main__":
     parser = argparse.ArgumentParser()
