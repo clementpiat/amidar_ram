@@ -5,7 +5,7 @@ class DeepQNet(nn.Module):
     def __init__(self, hidden_size=128):
         super(DeepQNet, self).__init__()
         self.state_space_size = 128
-        self.action_space_size = 10
+        self.action_space_size = 18
         self.hidden_size = hidden_size
         
 

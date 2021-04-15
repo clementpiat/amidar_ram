@@ -5,7 +5,7 @@ import copy
 import random as rd
 
 class Agent():
-    def __init__(self, net, policy="epsilon-greedy", discount=0.999, epsilon=0.3, batch_size=16, C=32):
+    def __init__(self, net, policy="epsilon-greedy", discount=0.99, epsilon=0.1, batch_size=16, C=32):
         """
         net: network that goes from the state space to the action space
         discount: discount factor in the bellman equation
