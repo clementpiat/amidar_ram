@@ -10,7 +10,7 @@ class Agent():
         """
         net: network that goes from the state space to the action space
         discount: discount factor in the bellman equation
-        epsilon: epsilon factor for the epsilon greedy policy
+        epsilon: epsilon factor for the epsilon greedy policy (initial value)
         C: number of iterations before updating the target network and copying the weights of the current network (for convergence stability)
         """
         self.net = net
@@ -37,7 +37,7 @@ class Agent():
     def act(self, observation, t):
         observation = torch.Tensor(observation)
         q = self.net(observation)
-        epsilon = self.epsilon #self.get_epsilon(t)
+        epsilon = self.get_epsilon(t)
         if np.random.random() <= epsilon:
             return self.env.action_space.sample()
 
@@ -62,7 +62,6 @@ class Agent():
         rewards = torch.Tensor([reward for _,_,reward,_ in samples])
 
         q = self.net(previous_observations)
-        #q = torch.Tensor([q[i,action] for i, (_,action,_,_) in enumerate(samples)])
         q = q[list(range(len(samples))), [action for (_,action,_,_) in samples]]
         loss = self.loss_fun(q, rewards + self.discount * torch.max(self.target_net(observations), axis=1).values.detach())
 

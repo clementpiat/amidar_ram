@@ -26,6 +26,7 @@ def train(n_episodes=20, n_steps_max=2000, print_ever_k_episodes=5):
             cumulative_reward += reward
             
             agent.remember(previous_observation, action, reward, observation)
+        
             if done:
                 break
         
