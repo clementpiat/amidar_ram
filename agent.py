@@ -6,7 +6,7 @@ import random as rd
 from collections import deque
 
 class Agent():
-    def __init__(self, net, env, discount=0.9, epsilon=0.99, epsilon_min=0.01, epsilon_decay=0.995, batch_size=64, C=1):
+    def __init__(self, net, env, discount=0.9, epsilon=0.99, epsilon_min=0.01, epsilon_decay=0.995, batch_size=64, C=1, print_loss_every_k_iter=20, lr=5e-2):
         """
         net: network that goes from the state space to the action space
         discount: discount factor in the bellman equation
@@ -23,13 +23,13 @@ class Agent():
         self.epsilon_decay = epsilon_decay
         self.batch_size = batch_size
         self.C = C
+        self.print_loss_every_k_iter = print_loss_every_k_iter
         
-        self.optimizer = torch.optim.Adam(self.net.parameters(), lr=5e-3)
+        self.optimizer = torch.optim.Adam(self.net.parameters(), lr=lr)
         self.loss_fun = nn.SmoothL1Loss()
         self.replay_buffer = deque(maxlen=100000)
         self.iteration = 0
         self.loss = 0
-        self.print_loss_every_k_iter = 100
 
     def get_epsilon(self, t):
         return max(self.epsilon_min, min(self.epsilon, 1.0 - np.log10((t + 1) * self.epsilon_decay)))

@@ -8,7 +8,7 @@ from agent import Agent
 from net import DeepQNet
 
 def train(n_episodes=20, n_steps_max=2000, print_ever_k_episodes=5):
-    env = gym.make('CartPole-v1')
+    env = gym.make('Boxing-ram-v0')
     net = DeepQNet()
     agent = Agent(net, env)
 
@@ -20,17 +20,12 @@ def train(n_episodes=20, n_steps_max=2000, print_ever_k_episodes=5):
         cumulative_reward = 0
         observation = env.reset()
         for t in range(n_steps_max):
-            # env.render()
             action = agent.act(observation, i_episode)
             previous_observation = observation
             observation, reward, done, info = env.step(action)    
             cumulative_reward += reward
             
-            if done:
-                reward = -1
-
             agent.remember(previous_observation, action, reward, observation)
-            
             if done:
                 break
         

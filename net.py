@@ -3,18 +3,18 @@ import torch
 
 class DeepQNet(nn.Module):
 
-    def __init__(self, hidden_size=24):
+    def __init__(self, hidden_size=32):
         super(DeepQNet, self).__init__()
-        self.state_space_size = 4#128
-        self.action_space_size = 2#18
+        self.state_space_size = 128
+        self.action_space_size = 18
         self.hidden_size = hidden_size
         
 
         self.mlp = nn.Sequential(
             nn.Linear(self.state_space_size, self.hidden_size),
             nn.Tanh(),
-            # nn.Linear(self.hidden_size, self.hidden_size*2),
-            # nn.Tanh(),
+            nn.Linear(self.hidden_size, self.hidden_size),
+            nn.Tanh(),
             nn.Linear(self.hidden_size, self.action_space_size)
         )
         
